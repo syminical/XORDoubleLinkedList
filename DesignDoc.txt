@@ -1,14 +1,27 @@
 
-XOR Double Linked-List
-	(DLL := Double-Linked-List, XDLL := XOR DLL)
+XOR Double Linked List
 
-Goal: Create a linked list datastructure which can be traversed in both directions. ('left' to 'right', and 'right' to 'left')
-	
-Why XOR? (bit-wise XOR)
-	Each node (besides head & tail) in a traditional DLL stores two node addresses, which allows traversal in both directions. This means that for a list with N nodes there will be (N-2) nodes storing two addresses, and 2 nodes (head + tail) storing 1 address.
-		That means there are 2(N-2)+2 = 2(N-1) node addresses stored in a traditional DLL.
-			Further, a lot of the stored addresses are duplicate stores.
-				A <-> B <-> C <-> D
-				B     AC    BD    C
+Author: Alexandru Manaila
 
-			The addresses for nodes in the 2(N-2) section, the largest section, are stored twice. XOR can eliminate this redundency.
+Overview: Eliminate redundant node address storage in a doubly linked-list, while maintaining the double linked property.
+	  	Traversal options based on current node (non-empty list):
+			Head: Next node, if it exists.      (Assume a Head node is always the first node.)
+			Tail: Previous node. 	            (Assume a Tail node is always the last node, and only exists for a list of length > 1.)
+			Body: Previous node or next node.   (Assume a body node is neither a head or a tail node.)
+
+Context: Each body node in a traditional doubly linked list stores two node addresses, which allows for list traversal in both directions. This means that for a list with N nodes there will be (n-2) nodes storing two addresses. Combined with the two addresses stored in the head and tail nodes, a doubly linked list with N nodes has 2(N-2)+2=2(N-1) node addresses stored in memory. Further, the address of each body node is stored twice:
+	 	A <-> B <-> C <-> D  (Doubly linked list with 4 nodes.)  N = 4
+	 	B     AC    BD    C  (Addresses stored in node above.)
+		1     11    21    2  (Address appearance count, left to right.)
+
+	 These properties of XOR (bit-wise Exclusive Or) can be used to combine two node addresses into a single value, stored in each node.
+	 	0 XOR A = A
+		A XOR B = B XOR A
+		(A XOR B) XOR B = A
+	 		The list above would become:
+				A <-> B <-> C <-> D    N = 4 
+	       		       0xB   AxC   BxD   Cx0   (AxB = A XOR B, each node stores one such value.)
+				1     1     1     1    (No redudancy.)
+		XOR halves the number of address stores per body node, compared to a non-XOR double linked list. This new list only has N 'addresses' stored in memory. (N-2 less)
+		In order to traverse a XOR doubly linke list (in any direction), the address of the previously visited node must also be stored in memory. This brings the total improvement of using XOR to (N-1) less node address stores in a doubly linked list.
+
