@@ -1,0 +1,14 @@
+
+XOR Double Linked-List
+	(DLL := Double-Linked-List, XDLL := XOR DLL)
+
+Goal: Create a linked list datastructure which can be traversed in both directions. ('left' to 'right', and 'right' to 'left')
+	
+Why XOR? (bit-wise XOR)
+	Each node (besides head & tail) in a traditional DLL stores two node addresses, which allows traversal in both directions. This means that for a list with N nodes there will be (N-2) nodes storing two addresses, and 2 nodes (head + tail) storing 1 address.
+		That means there are 2(N-2)+2 = 2(N-1) node addresses stored in a traditional DLL.
+			Further, a lot of the stored addresses are duplicate stores.
+				A <-> B <-> C <-> D
+				B     AC    BD    C
+
+			The addresses for nodes in the 2(N-2) section, the largest section, are stored twice. XOR can eliminate this redundency.
